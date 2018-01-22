@@ -1,0 +1,13 @@
+{
+  "name": "react-todo-immersive",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sebass17/react-todo-immersive.git",
+  "author": "Sebastián Méndez",
+  "license": "MIT",
+  "dependencies": {
+    "path": "^0.12.7",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}
