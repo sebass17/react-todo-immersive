@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import uuid from 'uuid/v1'
 import TodoList from './TodoList'
 
@@ -14,7 +13,7 @@ class TodoContainer extends React.Component {
         this.setState({ newTodoValue: e.target.value })
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = () => {
         const newTodo = {
             id: uuid(),
             value: this.state.newTodoValue,
@@ -35,12 +34,13 @@ class TodoContainer extends React.Component {
 
     render() {
         return (
-            <TodoList todos={this.state.todos}
-                      inputValue={this.state.newTodoValue} 
-                      handleInput={this.handleInput} 
-                      handleSubmit={this.handleSubmit} 
-                      handleChangeDone={this.handleChangeDone}>
-            </TodoList>
+          <TodoList
+            todos={this.state.todos}
+            inputValue={this.state.newTodoValue} 
+            handleInput={this.handleInput} 
+            handleSubmit={this.handleSubmit} 
+            handleChangeDone={this.handleChangeDone}
+          />
         )
     }
 }
