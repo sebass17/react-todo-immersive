@@ -1,34 +1,40 @@
 import React from 'react'
-import { number, string, bool, func } from 'prop-types'
+import { string, bool, func } from 'prop-types'
 
 class TodoItem extends React.Component {
 
   static propTypes = {
-    id: number,
+    id: string,
     value: string,
     done: bool,
     handleChangeDone: func
   }
 
   static defaultProps = {
-    id: 0,
+    id: '',
     value: '',
     done: false,
     handleChangeDone: () => {}
   }
 
   render() {
-    const isDone = this.props.done
-    
+
+    const {
+      id,
+      value,
+      done,
+      handleChangeDone
+    } = this.props
+
     return (
       <div>
-        {isDone ? (
-          <li>{this.props.value}<button onClick={() => this.props.handleChangeDone(this.props.id)}>Pending</button></li>
+        {done ? (
+          <li>{value}<button className="btn btn-outline-primary" onClick={() => handleChangeDone(id)}>Pending</button></li>
           ) : (
-            <li>{this.props.value}<input type="checkbox" onClick={() => this.props.handleChangeDone(this.props.id)} /></li> 
+            <li>{value}<input type="checkbox" onClick={() => handleChangeDone(id)} /></li> 
           )}
       </div>
-    );
+    )
   }
 }
 

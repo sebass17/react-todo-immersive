@@ -1,48 +1,81 @@
 import React from 'react'
-import uuid from 'uuid/v1'
+import { connect } from 'react-redux'
+import { func, array } from 'prop-types'
+//import uuid from 'uuid/v1'
+import { addTodo, changeDone, fetchTodos } from './TodoActions'
 import TodoList from './TodoList'
+
+const API = 'http://localhost:3000/todos'
 
 class TodoContainer extends React.Component {
     
-    state = {
+    static propTypes = {
+        todos: array,
+        addTodo: func,
+        changeDone: func,
+        fetchTodos: func
+    }
+    
+    static defaultProps = {
         todos: [],
-        newTodoValue: ''
-    };
-
-    handleInput = (e) => {
-        this.setState({ newTodoValue: e.target.value })
+        addTodo: () => {},
+        changeDone: () => {},
+        fetchTodos: () => {}
     }
 
-    handleSubmit = () => {
-        const newTodo = {
-            id: uuid(),
-            value: this.state.newTodoValue,
-            done: false
-        }
+    state = {
+        newTodoValue: ''
+    }
 
-        this.setState({ todos: [...this.state.todos, newTodo] }) 
+    componentDidMount() {
+        fetch(API)
+            .then(response => response.json())
+            .then(data => this.props.fetchTodos(data));
+    }
+    
+    handleInputChange = (e) => {
+        this.setState({ newTodoValue: e.target.value })
+    }
+    
+    handleSubmit = () => {
+        this.props.addTodo(this.state.newTodoValue)
         this.setState({ newTodoValue: '' })
     }
 
     handleChangeDone = (taskId) => {
-        this.setState({
+        this.props.changeDone(taskId)
+        /*this.setState({
             ...this.state,
             todos: this.state.todos.map(todo => 
             todo.id === taskId ? {...todo, done: !todo.done} : todo
-        )})
+        )})*/
     }
 
     render() {
         return (
           <TodoList
-            todos={this.state.todos}
+            todos={this.props.todos}
             inputValue={this.state.newTodoValue} 
-            handleInput={this.handleInput} 
-            handleSubmit={this.handleSubmit} 
+            handleInputChange={this.handleInputChange} 
+            handleSubmit={this.handleSubmit}
             handleChangeDone={this.handleChangeDone}
           />
         )
     }
 }
 
-export default TodoContainer
+function mapStateToProps(state) {
+    return {
+        todos: state.todos
+    }
+}
+  
+function mapDispatchToProps(dispatch) {
+    return {
+        addTodo: value => dispatch(addTodo(value)),
+        changeDone: value => dispatch(changeDone(value)),
+        fetchTodos: value => dispatch(fetchTodos(value))
+    }
+}
+  
+export default connect(mapStateToProps, mapDispatchToProps)(TodoContainer)
